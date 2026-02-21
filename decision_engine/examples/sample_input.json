@@ -1,0 +1,111 @@
+{
+  "scene": {
+    "scene_id": "scene-001",
+    "topdown_media_path": "/data/feeds/event_topdown_001.jpg",
+    "timestamp": "2026-02-20T19:30:00",
+    "venue_map_scale_ft_per_px": 0.4,
+    "restricted_zones": [
+      { "vertices": [[100, 100], [300, 100], [300, 200], [100, 200]] }
+    ],
+    "drone_state": {
+      "position_px": [500, 500],
+      "altitude_ft": 120.0,
+      "heading_deg": 45.0,
+      "zoom_level": 1.0
+    }
+  },
+  "objects": [
+    {
+      "object_id": "obj-001",
+      "label": "weapon?",
+      "confidence": 0.72,
+      "crop_media_path": "/data/crops/obj001_weapon.jpg",
+      "topdown_bbox": [230, 310, 40, 60],
+      "topdown_center": [250, 340],
+      "track_id": "trk-101",
+      "risk_hints": { "aggressive": 0.6 },
+      "notes": "Possible concealed object near waistband."
+    },
+    {
+      "object_id": "obj-002",
+      "label": "unattended_bag",
+      "confidence": 0.88,
+      "crop_media_path": "/data/crops/obj002_bag.jpg",
+      "topdown_bbox": [600, 450, 30, 30],
+      "topdown_center": [615, 465],
+      "track_id": null,
+      "risk_hints": { "unattended": 0.9, "stationary_long": 0.7 },
+      "notes": "Bag stationary for 8+ minutes, no owner nearby."
+    },
+    {
+      "object_id": "obj-003",
+      "label": "fight",
+      "confidence": 0.65,
+      "crop_media_path": "/data/crops/obj003_fight.jpg",
+      "topdown_bbox": [150, 700, 80, 60],
+      "topdown_center": [190, 730],
+      "track_id": "trk-205",
+      "risk_hints": { "aggressive": 0.8, "running": 0.3 },
+      "notes": "Two individuals in close physical confrontation."
+    },
+    {
+      "object_id": "obj-004",
+      "label": "crowd_cluster",
+      "confidence": 0.91,
+      "crop_media_path": "/data/crops/obj004_crowd.jpg",
+      "topdown_bbox": [400, 200, 200, 150],
+      "topdown_center": [500, 275],
+      "track_id": null,
+      "risk_hints": {},
+      "notes": "Large crowd near main stage. Density increasing."
+    },
+    {
+      "object_id": "obj-005",
+      "label": "person",
+      "confidence": 0.95,
+      "crop_media_path": "/data/crops/obj005_person.jpg",
+      "topdown_bbox": [120, 150, 25, 50],
+      "topdown_center": [132, 175],
+      "track_id": "trk-310",
+      "risk_hints": { "in_restricted_zone": 0.95 },
+      "notes": "Individual inside restricted zone boundary."
+    },
+    {
+      "object_id": "obj-006",
+      "label": "bag",
+      "confidence": 0.40,
+      "crop_media_path": "/data/crops/obj006_bag.jpg",
+      "topdown_bbox": [800, 100, 20, 20],
+      "topdown_center": [810, 110],
+      "track_id": null,
+      "risk_hints": {},
+      "notes": "Low confidence detection at edge of frame."
+    },
+    {
+      "object_id": "obj-007",
+      "label": "person",
+      "confidence": 0.55,
+      "crop_media_path": "/data/crops/obj007_person.jpg",
+      "topdown_bbox": [480, 510, 30, 60],
+      "topdown_center": [495, 540],
+      "track_id": "trk-412",
+      "risk_hints": { "running": 0.7 },
+      "notes": "Person running through event area."
+    },
+    {
+      "object_id": "obj-008",
+      "label": "unknown_object",
+      "confidence": 0.35,
+      "crop_media_path": "/data/crops/obj008_unknown.jpg",
+      "topdown_bbox": [700, 650, 35, 35],
+      "topdown_center": [717, 667],
+      "track_id": null,
+      "risk_hints": { "stationary_long": 0.5 },
+      "notes": "Unidentified item on ground."
+    }
+  ],
+  "instruction": {
+    "text": "Watch for unattended bags, fights, and anyone entering restricted zones. High priority on weapons. Monitor crowd density near the main stage.",
+    "priority_mode": "safety"
+  }
+}
