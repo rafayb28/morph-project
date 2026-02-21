@@ -1,0 +1,347 @@
+/* ── Reset & Variables ───────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface-alt: #232733;
+  --border: #2e3245;
+  --text: #e4e6f0;
+  --text-dim: #8b90a5;
+  --accent: #6c72ff;
+  --accent-glow: rgba(108, 114, 255, 0.25);
+  --green: #34d399;
+  --yellow: #fbbf24;
+  --red: #f87171;
+  --radius: 10px;
+  --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 26px;
+  color: var(--accent);
+}
+
+header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.status {
+  font-size: 13px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.status.connected {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--green);
+}
+
+.status.disconnected {
+  background: rgba(248, 113, 113, 0.15);
+  color: var(--red);
+}
+
+/* ── Main Layout ────────────────────────────────────────────────── */
+main {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  height: calc(100vh - 53px);
+  overflow: hidden;
+}
+
+/* ── Video Panel ────────────────────────────────────────────────── */
+.video-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: #000;
+}
+
+.video-container {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+#video-feed {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 85px);
+  border-radius: var(--radius);
+}
+
+/* ── Sidebar ────────────────────────────────────────────────────── */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+  background: var(--surface);
+  overflow-y: auto;
+}
+
+/* ── Prompt Section ─────────────────────────────────────────────── */
+.prompt-section {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.prompt-section label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+#prompt-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#prompt-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+#prompt-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 9px 0;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+#prompt-btn:hover {
+  opacity: 0.85;
+}
+
+.prompt-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+/* ── Stats Bar ──────────────────────────────────────────────────── */
+.stats-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  padding: 14px 8px;
+  border-right: 1px solid var(--border);
+}
+
+.stat:last-child {
+  border-right: none;
+}
+
+.stat-value {
+  display: block;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+#stat-objects .stat-value { color: var(--accent); }
+#stat-people .stat-value  { color: var(--green); }
+#stat-alerts .stat-value  { color: var(--red); }
+
+/* ── Result Groups ──────────────────────────────────────────────── */
+.result-group {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.result-group h3 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card {
+  padding: 8px 12px;
+  background: var(--surface-alt);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.card .card-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.card .card-detail {
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.alert-card {
+  border-left: 3px solid var(--red);
+  background: rgba(248, 113, 113, 0.07);
+}
+
+.count-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.count-card .count-num {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--accent);
+  min-width: 30px;
+  text-align: right;
+}
+
+/* ── History Section ────────────────────────────────────────────── */
+.history-section {
+  padding: 14px 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.history-section h2 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.history-entry {
+  padding: 7px 12px;
+  background: var(--surface-alt);
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-dim);
+}
+
+.history-entry .history-time {
+  font-weight: 600;
+  color: var(--text);
+  margin-right: 6px;
+}
+
+.history-alert {
+  border-left: 2px solid var(--red);
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  main {
+    grid-template-columns: 1fr;
+    grid-template-rows: 50vh 1fr;
+    overflow-y: auto;
+  }
+
+  .sidebar {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+}

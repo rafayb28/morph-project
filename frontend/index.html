@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Morph Vision</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <span class="logo-icon">&#9678;</span>
+      <h1>Morph</h1>
+    </div>
+    <div id="connection-status" class="status disconnected">Disconnected</div>
+  </header>
+
+  <main>
+    <!-- Left: Live camera feed with YOLO bounding boxes -->
+    <section class="video-panel">
+      <div class="video-container">
+        <img id="video-feed" src="/video_feed" alt="Live camera feed" />
+      </div>
+    </section>
+
+    <!-- Right: Controls + Results -->
+    <aside class="sidebar">
+      <!-- Prompt input -->
+      <div class="prompt-section">
+        <label for="prompt-input">Watch for (keywords)</label>
+        <textarea
+          id="prompt-input"
+          rows="2"
+          placeholder="e.g. person, dog, car, bottle..."
+        ></textarea>
+        <button id="prompt-btn">Update Watch List</button>
+        <p class="prompt-hint">Matching detections will be highlighted in red and appear as alerts.</p>
+      </div>
+
+      <!-- Stats bar -->
+      <div class="stats-bar">
+        <div class="stat" id="stat-objects">
+          <span class="stat-value">0</span>
+          <span class="stat-label">Objects</span>
+        </div>
+        <div class="stat" id="stat-people">
+          <span class="stat-value">0</span>
+          <span class="stat-label">People</span>
+        </div>
+        <div class="stat" id="stat-alerts">
+          <span class="stat-value">0</span>
+          <span class="stat-label">Alerts</span>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div id="alerts-container" class="result-group" hidden>
+        <h3>Alerts</h3>
+        <div id="alerts-list" class="card-list"></div>
+      </div>
+
+      <!-- Object counts -->
+      <div id="counts-container" class="result-group" hidden>
+        <h3>Detected Objects</h3>
+        <div id="counts-list" class="card-list"></div>
+      </div>
+
+      <!-- Detection log -->
+      <div class="history-section">
+        <h2>Detection History</h2>
+        <div id="history-list" class="history-list"></div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

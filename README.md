@@ -1,32 +1,94 @@
-# Drone Decision & Alert Engine (Post-CV)
+# Morph - Real-Time Camera Vision Analysis
 
-A local, offline-friendly module that takes computer-vision detections and operator instructions and produces **ranked drone action recommendations** and **security alerts** as plain text.
-
-Built as the "decision & action" layer of a drone surveillance system for event planners. The companion CV module (built separately) feeds object detections into this engine.
+Morph connects to your webcam and runs YOLOv8 object detection locally — no cloud API, no credits. It draws live bounding boxes on the video feed, counts objects, and lets you set watch keywords to get alerts when specific things appear in frame.
 
 ## Quick Start
 
+### 1. Prerequisites
+
+- Python 3.11+
+- A webcam (built-in or USB)
+
+### 2. Install dependencies
+
 ```bash
-# Install dependencies
+cd morph-project
 pip install -r requirements.txt
-
-# Run the demo
-python -m decision_engine.main --input decision_engine/examples/sample_input.json
 ```
 
-## Architecture
+The first run will automatically download the YOLOv8 model weights (~6 MB for `yolov8n.pt`).
 
-```
-Operator Instruction ─┐
-                      ├─→ Decision Engine ─→ Text Report
-CV Object Detections ─┘        │
-                               ├── instruction_parser.py  (Step A)
-                               ├── risk_scoring.py        (Step B)
-                               ├── action_planner.py      (Step C)
-                               └── alerting.py            (Step D)
+### 3. Configure (optional)
+
+Copy the example env file if you want to change defaults:
+
+```bash
+cp .env.example .env
 ```
 
-### Pipeline Steps
+| Variable | Description | Default |
+|---|---|---|
+| `CAMERA_INDEX` | Webcam device index (0 = default camera) | `0` |
+| `YOLO_MODEL` | YOLO model variant (see below) | `yolov8n.pt` |
+| `CONFIDENCE_THRESHOLD` | Minimum detection confidence (0-1) | `0.45` |
+| `DETECTION_INTERVAL` | Seconds between detection runs | `0.1` |
+
+**Available YOLO models** (speed vs accuracy trade-off):
+
+| Model | Size | Speed | Accuracy |
+|---|---|---|---|
+| `yolov8n.pt` | 6 MB | Fastest | Good |
+| `yolov8s.pt` | 22 MB | Fast | Better |
+| `yolov8m.pt` | 50 MB | Medium | Great |
+| `yolov8l.pt` | 84 MB | Slower | Excellent |
+
+### 4. Run the CV webcam module
+
+```bash
+uvicorn backend.main:app --reload
+```
+
+Open **http://localhost:8000** in your browser.
+
+## How It Works
+
+1. **Camera capture** — OpenCV grabs frames from your webcam in a background thread.
+2. **YOLO detection** — Every ~100ms a frame is fed through YOLOv8 locally on your machine. Detected objects get bounding boxes drawn directly on the frame.
+3. **Annotated video stream** — The `/video_feed` endpoint serves an MJPEG stream with bounding boxes and labels already drawn, at ~30 fps.
+4. **Watch keywords** — Type keywords (e.g. `person, dog, car`) in the dashboard. When YOLO detects a matching class, the bounding box turns red and an alert appears in the sidebar.
+5. **WebSocket push** — Detection counts and alerts are pushed to the browser in real time via WebSocket.
+
+## YOLO Class Names
+
+YOLOv8 detects 80 object classes from the COCO dataset. Some useful ones for the watch list:
+
+`person`, `bicycle`, `car`, `motorcycle`, `bus`, `truck`, `dog`, `cat`, `bird`, `horse`, `backpack`, `umbrella`, `handbag`, `suitcase`, `bottle`, `cup`, `fork`, `knife`, `spoon`, `bowl`, `banana`, `apple`, `sandwich`, `laptop`, `mouse`, `keyboard`, `cell phone`, `book`, `clock`, `scissors`, `teddy bear`, `chair`, `couch`, `bed`, `dining table`, `tv`
+
+Full list: [COCO classes](https://docs.ultralytics.com/datasets/detect/coco/)
+
+---
+
+## Drone Decision & Alert Engine
+
+The `decision_engine/` module is the post-CV "decision & action" layer. It takes CV detections + operator instructions and produces ranked drone action recommendations and security alerts.
+
+### Run the decision engine
+
+```bash
+# Single evaluation from a JSON file
+python -m decision_engine.main --input decision_engine/examples/political_rally.json
+
+# From a CV output folder + operator instructions
+python -m decision_engine.main \
+    --cv-dir ./cv_output \
+    --instruction "Watch for weapons and perimeter breaches" \
+    --priority safety --drone-pos 500 400 --drone-alt 150
+
+# Live operator session (type new instructions mid-flight)
+python -m decision_engine.live_session --input decision_engine/examples/political_rally.json
+```
+
+### Decision engine pipeline
 
 | Step | Module | What it does |
 |------|--------|-------------|
@@ -35,94 +97,11 @@ CV Object Detections ─┘        │
 | C | `action_planner.py` | Generates sequenced drone commands (MOVE, HOVER, ZOOM, TRACK, ORBIT, ASCEND, DESCEND) in feet |
 | D | `alerting.py` | Creates severity-tagged alerts with notification routing and next-step guidance |
 
-## Input Format
+### Plugging CV into the decision engine
 
-The engine accepts a single JSON payload with three sections:
+See [CV_INTEGRATION.md](CV_INTEGRATION.md) for the full integration guide. The CV module drops a folder with `scene.jpg` + `detections.json` + `crops/`, and the decision engine reads it directly.
 
-### `scene` — Scene Context
-| Field | Type | Description |
-|-------|------|-------------|
-| `scene_id` | string | Unique scene identifier |
-| `topdown_media_path` | string | Path to top-down image/video (consumed by CV module) |
-| `timestamp` | ISO datetime | When the frame was captured |
-| `venue_map_scale_ft_per_px` | float or null | Venue scale for pixel→feet conversion. If null, defaults to 0.5 ft/px |
-| `restricted_zones` | list of polygons or null | Restricted area boundaries (for future use) |
-| `drone_state` | object | Current drone position, altitude, heading, zoom |
-
-### `objects` — CV Detections
-Each object from the CV module:
-| Field | Type | Description |
-|-------|------|-------------|
-| `object_id` | string | Unique ID from CV tracker |
-| `label` | string | Classification label (e.g. `"weapon?"`, `"fight"`, `"unattended_bag"`) |
-| `confidence` | float 0–1 | CV model confidence |
-| `crop_media_path` | string | Path to zoomed-in crop |
-| `topdown_bbox` | [x, y, w, h] | Bounding box in top-down pixel coords |
-| `topdown_center` | [x, y] | Center point in top-down coords |
-| `risk_hints` | dict | Optional CV-provided hints (e.g. `{"unattended": 0.9}`) |
-
-### `instruction` — Operator Input
-| Field | Type | Description |
-|-------|------|-------------|
-| `text` | string | Free-form instruction text |
-| `priority_mode` | enum | One of: `safety`, `crowd`, `theft`, `general` |
-
-See `decision_engine/examples/sample_input.json` for a complete example.
-
-## Output
-
-The engine prints a formatted text report with four sections:
-
-1. **Summary** — Top 1–3 risks with severity, label, confidence, and score
-2. **Recommended Drone Actions** — Ranked, sequenced commands with parameters in feet and rationale
-3. **Alerts** — Severity-tagged notifications with routing (staff / security / authorities) and next steps
-4. **Assumptions / Uncertainties** — Scale defaults, low-confidence flags, human confirmation requests
-
-## How to Extend
-
-### Adding new labels/weights
-Edit `decision_engine/config.py`:
-- `LABEL_BASE_WEIGHTS` — add new labels with a 0–10 risk weight
-- `HINT_WEIGHTS` — add new risk hint categories
-- `WATCHLIST_KEYWORDS` — add synonyms so the instruction parser recognizes new threats
-
-### Movement conversion
-All drone movements are output in **feet**. The conversion uses `venue_map_scale_ft_per_px` from the scene context. If not provided, the engine assumes **0.5 ft/px** and flags this in the assumptions section.
-
-To change the default: edit `DEFAULT_SCALE_FT_PER_PX` in `config.py`.
-
-### Plugging in the CV module
-The CV module should produce `ObjectOfInterest` objects matching the schema in `models.py`. The simplest integration:
-
-```python
-from decision_engine.models import DecisionInput, ObjectOfInterest, SceneContext
-from decision_engine.main import run_pipeline, format_report
-
-payload = DecisionInput(
-    scene=your_scene_context,
-    objects=your_cv_detections,
-    instruction=operator_instruction,
-)
-output = run_pipeline(payload)
-print(format_report(output))
-```
-
-## Optional: FastAPI Endpoint
-
-```bash
-uvicorn decision_engine.api:app --reload --port 8000
-```
-
-Then POST to `/recommend`:
-```bash
-curl -X POST http://localhost:8000/recommend \
-  -H "Content-Type: application/json" \
-  -d @decision_engine/examples/sample_input.json
-```
-
-Add `Accept: text/plain` header for the formatted text report instead of JSON.
-
-## Running Tests
+### Running tests
 
 ```bash
 pytest tests/ -v
@@ -131,29 +110,33 @@ pytest tests/ -v
 ## Project Structure
 
 ```
-decision_engine/
-├── __init__.py
-├── models.py              # Pydantic data contracts (input + output)
-├── config.py              # Weights, thresholds, defaults
-├── instruction_parser.py  # Step A: parse operator text → watchlist rules
-├── risk_scoring.py        # Step B: score objects by risk
-├── action_planner.py      # Step C: generate drone action commands
-├── alerting.py            # Step D: generate severity alerts
-├── main.py                # CLI entry point + text report formatter
-├── api.py                 # Optional FastAPI endpoint
-└── examples/
-    ├── sample_input.json  # Demo payload with 8 objects
-    └── run_demo.py        # Standalone demo runner
-tests/
-├── test_instruction_parser.py
-└── test_risk_scoring.py
-requirements.txt
-README.md
+morph-project/
+├── backend/                   # CV webcam module
+│   ├── main.py                # FastAPI app — routes, MJPEG stream, WebSocket
+│   ├── camera.py              # Threaded OpenCV webcam capture
+│   ├── detector.py            # YOLOv8 detection + bounding box drawing
+│   ├── analysis.py            # Background detection pipeline
+│   ├── models.py              # Pydantic data models
+│   └── config.py              # Settings loaded from .env
+├── frontend/                  # CV webcam dashboard
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+├── decision_engine/           # Drone decision & alert engine
+│   ├── models.py              # Pydantic data contracts (input + output)
+│   ├── config.py              # Weights, thresholds, defaults
+│   ├── instruction_parser.py  # Parse operator text → watchlist rules
+│   ├── risk_scoring.py        # Score objects by risk
+│   ├── action_planner.py      # Generate drone action commands
+│   ├── alerting.py            # Generate severity alerts
+│   ├── cv_intake.py           # Adapter for CV module output
+│   ├── live_session.py        # Interactive operator session
+│   ├── main.py                # CLI entry point + text report formatter
+│   ├── api.py                 # Optional FastAPI endpoint
+│   └── examples/              # Scenario JSON files + sample CV output
+├── tests/                     # Unit tests
+├── CV_INTEGRATION.md          # Integration guide for CV ↔ decision engine
+├── requirements.txt
+├── .env.example
+└── README.md
 ```
-
-## Tech Stack
-
-- Python 3.11+
-- Pydantic v2 (validation & serialization)
-- FastAPI + Uvicorn (optional REST endpoint)
-- No external paid services — fully offline
