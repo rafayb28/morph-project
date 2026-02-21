@@ -9,6 +9,8 @@ const statAlerts = document.querySelector("#stat-alerts .stat-value");
 
 const alertsContainer = document.getElementById("alerts-container");
 const alertsList = document.getElementById("alerts-list");
+const detectionsContainer = document.getElementById("detections-container");
+const detectionsList = document.getElementById("detections-list");
 const countsContainer = document.getElementById("counts-container");
 const countsList = document.getElementById("counts-list");
 const historyList = document.getElementById("history-list");
@@ -74,12 +76,13 @@ function handleMessage(msg) {
 
 // ── Rendering ───────────────────────────────────────────────────
 function renderResult(r) {
-  const totalObjects = r.detections ? r.detections.length : 0;
-  statObjects.textContent = totalObjects;
+  const dets = r.detections || [];
+  statObjects.textContent = dets.length;
   statPeople.textContent = r.total_people || 0;
   statAlerts.textContent = r.alerts ? r.alerts.length : 0;
 
   renderAlerts(r.alerts || []);
+  renderDetections(dets);
   renderCounts(r.object_counts || {});
   addHistoryEntry(r);
 }
@@ -97,6 +100,32 @@ function renderAlerts(alerts) {
         ${a.reason ? `<div class="card-detail">${esc(a.reason)}</div>` : ""}
       </div>`
     )
+    .join("");
+}
+
+function renderDetections(detections) {
+  if (detections.length === 0) {
+    detectionsContainer.hidden = true;
+    return;
+  }
+  detectionsContainer.hidden = false;
+
+  const sorted = [...detections].sort((a, b) => b.confidence - a.confidence);
+
+  detectionsList.innerHTML = sorted
+    .map((d) => {
+      const pct = (d.confidence * 100).toFixed(0);
+      const loc = d.bbox
+        ? `(${Math.round(d.bbox.x1)}, ${Math.round(d.bbox.y1)})`
+        : "";
+      return `<div class="card detection-card">
+        <div class="detection-row">
+          <span class="detection-label">${esc(d.label)}</span>
+          <span class="detection-conf">${pct}%</span>
+        </div>
+        ${loc ? `<div class="card-detail">Position: ${loc}</div>` : ""}
+      </div>`;
+    })
     .join("");
 }
 

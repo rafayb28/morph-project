@@ -273,6 +273,31 @@ main {
   text-align: right;
 }
 
+/* Detection cards */
+.detection-card {
+  border-left: 3px solid var(--green);
+}
+
+.detection-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detection-label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.detection-conf {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  background: rgba(52, 211, 153, 0.12);
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
 /* ── History Section ────────────────────────────────────────────── */
 .history-section {
   padding: 14px 20px;

@@ -7,8 +7,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 class Settings(BaseSettings):
     camera_index: int = 0
-    yolo_model: str = "yolov8n.pt"
-    confidence_threshold: float = 0.45
+    yolo_model: str = "yolov8s.pt"
+    confidence_threshold: float = 0.35
     detection_interval: float = 0.5
     detection_size: int = 640
     jpeg_quality: int = 80
