@@ -45,7 +45,7 @@ async def _mjpeg_generator():
                 b"--frame\r\n"
                 b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
             )
-        await asyncio.sleep(0.033)  # ~30 fps
+        await asyncio.sleep(0.066)  # ~15 fps
 
 
 @app.get("/video_feed")

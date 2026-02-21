@@ -14,20 +14,8 @@ log = logging.getLogger(__name__)
 
 PERSON_LABEL = "person"
 
-# Colour palette for bounding boxes (BGR)
-COLOURS = [
-    (255, 96, 96),
-    (96, 255, 96),
-    (96, 96, 255),
-    (255, 255, 96),
-    (255, 96, 255),
-    (96, 255, 255),
-    (200, 160, 96),
-    (96, 200, 160),
-]
-
-ALERT_COLOUR = (0, 0, 255)   # red for alerts
-DEFAULT_COLOUR = (0, 220, 0)  # green for normal detections
+ALERT_COLOUR = (0, 0, 255)
+DEFAULT_COLOUR = (0, 220, 0)
 
 
 class Detector:
@@ -42,11 +30,22 @@ class Detector:
     def detect(
         self, frame: np.ndarray, prompt: str = ""
     ) -> tuple[DetectionResult, np.ndarray]:
-        """Run detection on a frame.
+        """Run detection on *frame* (full resolution).
 
-        Returns (structured result, annotated frame copy).
+        YOLO inference runs on a downscaled copy for speed; bounding boxes
+        are mapped back to the original resolution for drawing.
         """
-        results = self._model(frame, conf=settings.confidence_threshold, verbose=False)
+        h_orig, w_orig = frame.shape[:2]
+        inf_size = settings.detection_size
+
+        scale = 1.0
+        if w_orig > inf_size:
+            scale = w_orig / inf_size
+            small = cv2.resize(frame, (inf_size, int(h_orig / scale)))
+        else:
+            small = frame
+
+        results = self._model(small, conf=settings.confidence_threshold, verbose=False)
         result = results[0]
 
         detections: list[Detection] = []
@@ -60,7 +59,12 @@ class Detector:
             cls_id = int(box.cls[0])
             label = self._class_names.get(cls_id, f"class_{cls_id}")
             conf = float(box.conf[0])
-            x1, y1, x2, y2 = box.xyxy[0].tolist()
+
+            sx1, sy1, sx2, sy2 = box.xyxy[0].tolist()
+            x1 = int(sx1 * scale)
+            y1 = int(sy1 * scale)
+            x2 = int(sx2 * scale)
+            y2 = int(sy2 * scale)
 
             detections.append(
                 Detection(
@@ -75,7 +79,7 @@ class Detector:
 
             is_alert = _matches_prompt(label, watch_tokens)
             colour = ALERT_COLOUR if is_alert else DEFAULT_COLOUR
-            _draw_box(annotated, label, conf, int(x1), int(y1), int(x2), int(y2), colour)
+            _draw_box(annotated, label, conf, x1, y1, x2, y2, colour)
 
         alerts = _build_alerts(detections, watch_tokens)
 
@@ -92,7 +96,6 @@ class Detector:
 # -- prompt matching helpers ----------------------------------------------
 
 def _parse_prompt(prompt: str) -> set[str]:
-    """Extract lowercase tokens from the user's watch prompt."""
     if not prompt.strip():
         return set()
     return {tok.strip().lower() for tok in prompt.replace(",", " ").split() if tok.strip()}
@@ -117,7 +120,7 @@ def _build_alerts(detections: list[Detection], tokens: set[str]) -> list[Alert]:
                 Alert(
                     label=det.label,
                     confidence=det.confidence,
-                    reason=f"Matched watch keyword in prompt",
+                    reason="Matched watch keyword in prompt",
                 )
             )
     return alerts
@@ -134,7 +137,7 @@ def _draw_box(
 ) -> None:
     cv2.rectangle(img, (x1, y1), (x2, y2), colour, 2)
     text = f"{label} {conf:.0%}"
-    (tw, th), baseline = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.55, 1)
+    (tw, th), _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.55, 1)
     cv2.rectangle(img, (x1, y1 - th - 8), (x1 + tw + 4, y1), colour, -1)
     cv2.putText(img, text, (x1 + 2, y1 - 4), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (255, 255, 255), 1)
 

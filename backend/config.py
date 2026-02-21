@@ -9,7 +9,8 @@ class Settings(BaseSettings):
     camera_index: int = 0
     yolo_model: str = "yolov8n.pt"
     confidence_threshold: float = 0.45
-    detection_interval: float = 0.1
+    detection_interval: float = 0.5
+    detection_size: int = 640
     jpeg_quality: int = 80
     frame_width: int = 1280
     frame_height: int = 720
