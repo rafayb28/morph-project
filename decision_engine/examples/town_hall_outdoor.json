@@ -1,0 +1,111 @@
+{
+  "scene": {
+    "scene_id": "townhall-001",
+    "topdown_media_path": "/data/feeds/civic_center_plaza_topdown.jpg",
+    "timestamp": "2026-02-20T18:30:00",
+    "venue_map_scale_ft_per_px": 0.45,
+    "restricted_zones": [
+      { "vertices": [[300, 400], [500, 400], [500, 550], [300, 550]] }
+    ],
+    "drone_state": {
+      "position_px": [400, 100],
+      "altitude_ft": 130.0,
+      "heading_deg": 160.0,
+      "zoom_level": 1.0
+    }
+  },
+  "objects": [
+    {
+      "object_id": "th-obj-001",
+      "label": "rushing_individual",
+      "confidence": 0.79,
+      "crop_media_path": "/data/crops/th_rusher.jpg",
+      "topdown_bbox": [350, 380, 25, 50],
+      "topdown_center": [362, 405],
+      "track_id": "trk-t01",
+      "risk_hints": { "approaching_stage": 0.95, "running": 0.9, "counter_flow": 0.8 },
+      "notes": "Individual running against crowd flow directly toward podium. Security not yet responding."
+    },
+    {
+      "object_id": "th-obj-002",
+      "label": "suspicious_person",
+      "confidence": 0.66,
+      "crop_media_path": "/data/crops/th_suspicious_east.jpg",
+      "topdown_bbox": [700, 450, 30, 55],
+      "topdown_center": [715, 477],
+      "track_id": "trk-t02",
+      "risk_hints": { "concealed_object": 0.8, "near_vip": 0.7, "obscured_face": 0.9 },
+      "notes": "Person in hoodie standing still at east edge of crowd. Hand inside jacket. Face covered."
+    },
+    {
+      "object_id": "th-obj-003",
+      "label": "crowd_cluster",
+      "confidence": 0.95,
+      "crop_media_path": "/data/crops/th_crowd_surge.jpg",
+      "topdown_bbox": [250, 200, 350, 180],
+      "topdown_center": [425, 290],
+      "track_id": null,
+      "risk_hints": { "counter_flow": 0.4 },
+      "notes": "Main audience ~800 people. Back rows pushing forward as mayor begins speaking. Density unsafe near front barricade."
+    },
+    {
+      "object_id": "th-obj-004",
+      "label": "weapon?",
+      "confidence": 0.52,
+      "crop_media_path": "/data/crops/th_possible_weapon.jpg",
+      "topdown_bbox": [550, 350, 20, 35],
+      "topdown_center": [560, 367],
+      "track_id": "trk-t04",
+      "risk_hints": { "concealed_object": 0.6 },
+      "notes": "Glint of metallic object in individual's waistband. Could be phone, belt buckle, or weapon. Needs closer look."
+    },
+    {
+      "object_id": "th-obj-005",
+      "label": "barricade_breach",
+      "confidence": 0.87,
+      "crop_media_path": "/data/crops/th_barricade.jpg",
+      "topdown_bbox": [150, 500, 60, 30],
+      "topdown_center": [180, 515],
+      "track_id": "trk-t05",
+      "risk_hints": { "breaching_perimeter": 0.8, "coordinated_movement": 0.6 },
+      "notes": "Three individuals pushed through southwest barricade. Moving toward backstage area."
+    },
+    {
+      "object_id": "th-obj-006",
+      "label": "confrontation",
+      "confidence": 0.83,
+      "crop_media_path": "/data/crops/th_confrontation.jpg",
+      "topdown_bbox": [600, 200, 50, 40],
+      "topdown_center": [625, 220],
+      "track_id": "trk-t06",
+      "risk_hints": { "aggressive": 0.85 },
+      "notes": "Physical altercation between attendee and someone with a protest sign. Punches thrown."
+    },
+    {
+      "object_id": "th-obj-007",
+      "label": "medical_emergency",
+      "confidence": 0.90,
+      "crop_media_path": "/data/crops/th_medical.jpg",
+      "topdown_bbox": [320, 250, 30, 30],
+      "topdown_center": [335, 265],
+      "track_id": null,
+      "risk_hints": {},
+      "notes": "Person collapsed in dense crowd section. Bystanders waving for help. Heat-related likely."
+    },
+    {
+      "object_id": "th-obj-008",
+      "label": "approaching_vehicle",
+      "confidence": 0.73,
+      "crop_media_path": "/data/crops/th_vehicle.jpg",
+      "topdown_bbox": [50, 700, 70, 35],
+      "topdown_center": [85, 717],
+      "track_id": "trk-t08",
+      "risk_hints": { "approaching_stage": 0.3 },
+      "notes": "Van driving slowly on closed street toward plaza south entrance. Road should be blocked."
+    }
+  ],
+  "instruction": {
+    "text": "Mayor giving outdoor town hall address. Immediately alert on anyone rushing the stage or breaching barricades. Watch for weapons, suspicious individuals near the podium, and crowd surge. Monitor for medical emergencies in the crowd.",
+    "priority_mode": "safety"
+  }
+}

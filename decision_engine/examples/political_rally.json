@@ -1,0 +1,134 @@
+{
+  "scene": {
+    "scene_id": "rally-001",
+    "topdown_media_path": "/data/feeds/city_park_rally_topdown.jpg",
+    "timestamp": "2026-02-20T14:00:00",
+    "venue_map_scale_ft_per_px": 0.6,
+    "restricted_zones": [
+      { "vertices": [[400, 350], [600, 350], [600, 500], [400, 500]] },
+      { "vertices": [[0, 0], [1200, 0], [1200, 50], [0, 50]] }
+    ],
+    "drone_state": {
+      "position_px": [500, 200],
+      "altitude_ft": 150.0,
+      "heading_deg": 180.0,
+      "zoom_level": 1.0
+    }
+  },
+  "objects": [
+    {
+      "object_id": "rally-obj-001",
+      "label": "rooftop_figure",
+      "confidence": 0.68,
+      "crop_media_path": "/data/crops/rally_rooftop_figure.jpg",
+      "topdown_bbox": [50, 30, 25, 40],
+      "topdown_center": [62, 50],
+      "track_id": "trk-r01",
+      "risk_hints": { "concealed_object": 0.7, "obscured_face": 0.8 },
+      "notes": "Person on parking garage rooftop overlooking stage. Holding elongated object."
+    },
+    {
+      "object_id": "rally-obj-002",
+      "label": "stage_rush",
+      "confidence": 0.81,
+      "crop_media_path": "/data/crops/rally_stage_rush.jpg",
+      "topdown_bbox": [430, 340, 30, 40],
+      "topdown_center": [445, 360],
+      "track_id": "trk-r02",
+      "risk_hints": { "approaching_stage": 0.9, "running": 0.85 },
+      "notes": "Individual sprinting toward the stage from crowd area. Bypassed first barricade."
+    },
+    {
+      "object_id": "rally-obj-003",
+      "label": "suspicious_person",
+      "confidence": 0.74,
+      "crop_media_path": "/data/crops/rally_suspicious.jpg",
+      "topdown_bbox": [800, 600, 30, 50],
+      "topdown_center": [815, 625],
+      "track_id": "trk-r03",
+      "risk_hints": { "loitering": 0.9, "concealed_object": 0.6, "erratic_movement": 0.5 },
+      "notes": "Individual pacing behind crowd near south exit. Bulge under jacket. Has been in area 20+ minutes."
+    },
+    {
+      "object_id": "rally-obj-004",
+      "label": "crowd_cluster",
+      "confidence": 0.93,
+      "crop_media_path": "/data/crops/rally_crowd_front.jpg",
+      "topdown_bbox": [350, 250, 300, 100],
+      "topdown_center": [500, 300],
+      "track_id": null,
+      "risk_hints": {},
+      "notes": "Dense crowd in front of stage. Approximately 2000 people. Density increasing as speech begins."
+    },
+    {
+      "object_id": "rally-obj-005",
+      "label": "protest_group",
+      "confidence": 0.85,
+      "crop_media_path": "/data/crops/rally_protesters.jpg",
+      "topdown_bbox": [950, 150, 100, 80],
+      "topdown_center": [1000, 190],
+      "track_id": "trk-r05",
+      "risk_hints": { "aggressive": 0.6, "coordinated_movement": 0.7 },
+      "notes": "Group of ~30 counter-protesters at northeast perimeter. Signs and chanting. Moving toward main crowd."
+    },
+    {
+      "object_id": "rally-obj-006",
+      "label": "unauthorized_vehicle",
+      "confidence": 0.77,
+      "crop_media_path": "/data/crops/rally_vehicle.jpg",
+      "topdown_bbox": [1100, 700, 60, 30],
+      "topdown_center": [1130, 715],
+      "track_id": "trk-r06",
+      "risk_hints": { "approaching_stage": 0.4 },
+      "notes": "Dark SUV idling on closed road south of venue. No event credentials visible. Engine running."
+    },
+    {
+      "object_id": "rally-obj-007",
+      "label": "perimeter_breach",
+      "confidence": 0.88,
+      "crop_media_path": "/data/crops/rally_breach.jpg",
+      "topdown_bbox": [200, 500, 40, 30],
+      "topdown_center": [220, 515],
+      "track_id": "trk-r07",
+      "risk_hints": { "breaching_perimeter": 0.95, "running": 0.6 },
+      "notes": "Two individuals climbed west fence into restricted backstage area."
+    },
+    {
+      "object_id": "rally-obj-008",
+      "label": "unattended_bag",
+      "confidence": 0.82,
+      "crop_media_path": "/data/crops/rally_bag.jpg",
+      "topdown_bbox": [480, 280, 20, 20],
+      "topdown_center": [490, 290],
+      "track_id": null,
+      "risk_hints": { "unattended": 0.85, "stationary_long": 0.9 },
+      "notes": "Black backpack left against barricade near stage front. No owner in vicinity for 12 minutes."
+    },
+    {
+      "object_id": "rally-obj-009",
+      "label": "confrontation",
+      "confidence": 0.71,
+      "crop_media_path": "/data/crops/rally_confrontation.jpg",
+      "topdown_bbox": [700, 250, 50, 40],
+      "topdown_center": [725, 270],
+      "track_id": "trk-r09",
+      "risk_hints": { "aggressive": 0.75 },
+      "notes": "Two groups of attendees in heated verbal exchange. Shoving observed."
+    },
+    {
+      "object_id": "rally-obj-010",
+      "label": "unauthorized_drone",
+      "confidence": 0.60,
+      "crop_media_path": "/data/crops/rally_drone.jpg",
+      "topdown_bbox": [300, 100, 15, 15],
+      "topdown_center": [307, 107],
+      "track_id": "trk-r10",
+      "risk_hints": {},
+      "notes": "Small quadcopter spotted at ~80ft altitude northwest of stage. Not on approved flight list."
+    }
+  ],
+  "instruction": {
+    "text": "Governor is speaking at outdoor rally. Immediately watch for anyone rushing the stage, rooftop threats, and perimeter breaches. High priority on weapons and suspicious individuals near the stage. Monitor crowd density and protest groups for escalation.",
+    "priority_mode": "safety"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "scene_id": "city-hall-speech-001",
+  "timestamp": "2026-02-20T16:00:00",
+  "detections": [
+    {
+      "object_id": "det-001",
+      "label": "suspicious_person",
+      "confidence": 0.78,
+      "crop_filename": "det-001.jpg",
+      "bbox": [820, 380, 30, 55],
+      "center": [835, 407],
+      "track_id": "trk-501",
+      "risk_hints": {"concealed_object": 0.75, "near_vip": 0.85, "obscured_face": 0.6},
+      "notes": "Individual in dark hoodie near VIP entrance. Hand in jacket, face partially covered."
+    },
+    {
+      "object_id": "det-002",
+      "label": "rushing_individual",
+      "confidence": 0.84,
+      "crop_filename": "det-002.jpg",
+      "bbox": [400, 420, 25, 50],
+      "center": [412, 445],
+      "track_id": "trk-502",
+      "risk_hints": {"approaching_stage": 0.92, "running": 0.88, "counter_flow": 0.7},
+      "notes": "Person sprinting from crowd toward podium steps. Security has not reacted yet."
+    },
+    {
+      "object_id": "det-003",
+      "label": "rooftop_figure",
+      "confidence": 0.61,
+      "crop_filename": "det-003.jpg",
+      "bbox": [150, 50, 20, 30],
+      "center": [160, 65],
+      "track_id": "trk-503",
+      "risk_hints": {"concealed_object": 0.8},
+      "notes": "Figure lying prone on parking garage roof. Elongated object next to them — could be tripod or rifle."
+    },
+    {
+      "object_id": "det-004",
+      "label": "crowd_cluster",
+      "confidence": 0.94,
+      "crop_filename": "det-004.jpg",
+      "bbox": [300, 250, 250, 130],
+      "center": [425, 315],
+      "track_id": null,
+      "risk_hints": {},
+      "notes": "Main audience area. ~1500 attendees. Front rows pressing against barricade as speech starts."
+    },
+    {
+      "object_id": "det-005",
+      "label": "perimeter_breach",
+      "confidence": 0.89,
+      "crop_filename": "det-005.jpg",
+      "bbox": [50, 480, 40, 30],
+      "center": [70, 495],
+      "track_id": "trk-505",
+      "risk_hints": {"breaching_perimeter": 0.95, "running": 0.6},
+      "notes": "Two people jumped west security fence into restricted zone behind stage."
+    },
+    {
+      "object_id": "det-006",
+      "label": "unattended_bag",
+      "confidence": 0.81,
+      "crop_filename": "det-006.jpg",
+      "bbox": [440, 280, 20, 18],
+      "center": [450, 289],
+      "track_id": null,
+      "risk_hints": {"unattended": 0.9, "stationary_long": 0.85},
+      "notes": "Black duffel bag on ground near front barricade. No owner visible for 15+ minutes."
+    },
+    {
+      "object_id": "det-007",
+      "label": "approaching_vehicle",
+      "confidence": 0.76,
+      "crop_filename": "det-007.jpg",
+      "bbox": [900, 600, 65, 35],
+      "center": [932, 617],
+      "track_id": "trk-507",
+      "risk_hints": {"counter_flow": 0.8},
+      "notes": "White van driving slowly on blocked street toward south entrance. No credentials visible."
+    },
+    {
+      "object_id": "det-008",
+      "label": "protest_group",
+      "confidence": 0.87,
+      "crop_filename": "det-008.jpg",
+      "bbox": [700, 100, 120, 80],
+      "center": [760, 140],
+      "track_id": "trk-508",
+      "risk_hints": {"aggressive": 0.55, "coordinated_movement": 0.7},
+      "notes": "Counter-protest group of ~40 people moving from northeast toward main crowd. Chanting, some with sticks."
+    },
+    {
+      "object_id": "det-009",
+      "label": "weapon?",
+      "confidence": 0.48,
+      "crop_filename": "det-009.jpg",
+      "bbox": [520, 350, 18, 30],
+      "center": [529, 365],
+      "track_id": "trk-509",
+      "risk_hints": {"concealed_object": 0.5},
+      "notes": "Metallic glint at individual's waistband. Low confidence — could be phone or belt buckle."
+    }
+  ]
+}

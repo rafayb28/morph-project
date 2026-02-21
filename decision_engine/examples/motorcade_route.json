@@ -1,0 +1,123 @@
+{
+  "scene": {
+    "scene_id": "motorcade-001",
+    "topdown_media_path": "/data/feeds/downtown_corridor_topdown.jpg",
+    "timestamp": "2026-02-20T10:15:00",
+    "venue_map_scale_ft_per_px": 0.8,
+    "restricted_zones": [
+      { "vertices": [[0, 350], [1400, 350], [1400, 450], [0, 450]] },
+      { "vertices": [[600, 200], [800, 200], [800, 350], [600, 350]] }
+    ],
+    "drone_state": {
+      "position_px": [200, 400],
+      "altitude_ft": 200.0,
+      "heading_deg": 90.0,
+      "zoom_level": 1.0
+    }
+  },
+  "objects": [
+    {
+      "object_id": "mc-obj-001",
+      "label": "rooftop_figure",
+      "confidence": 0.75,
+      "crop_media_path": "/data/crops/mc_rooftop_east.jpg",
+      "topdown_bbox": [900, 100, 20, 35],
+      "topdown_center": [910, 117],
+      "track_id": "trk-m01",
+      "risk_hints": { "concealed_object": 0.85, "obscured_face": 0.7 },
+      "notes": "Figure prone on rooftop of office building 3 blocks ahead of motorcade. Long object beside them."
+    },
+    {
+      "object_id": "mc-obj-002",
+      "label": "unauthorized_vehicle",
+      "confidence": 0.82,
+      "crop_media_path": "/data/crops/mc_vehicle_block.jpg",
+      "topdown_bbox": [700, 380, 80, 40],
+      "topdown_center": [740, 400],
+      "track_id": "trk-m02",
+      "risk_hints": { "stationary_long": 0.9 },
+      "notes": "White box truck parked in motorcade lane 4 blocks ahead. Not on cleared vehicle list. Has been stationary 45 minutes."
+    },
+    {
+      "object_id": "mc-obj-003",
+      "label": "crowd_cluster",
+      "confidence": 0.91,
+      "crop_media_path": "/data/crops/mc_crowd_overpass.jpg",
+      "topdown_bbox": [500, 250, 150, 60],
+      "topdown_center": [575, 280],
+      "track_id": null,
+      "risk_hints": { "counter_flow": 0.3 },
+      "notes": "~200 spectators gathered on pedestrian overpass above motorcade route. Some leaning over railing."
+    },
+    {
+      "object_id": "mc-obj-004",
+      "label": "suspicious_package",
+      "confidence": 0.69,
+      "crop_media_path": "/data/crops/mc_package.jpg",
+      "topdown_bbox": [600, 420, 25, 20],
+      "topdown_center": [612, 430],
+      "track_id": null,
+      "risk_hints": { "unattended": 0.95, "stationary_long": 0.85 },
+      "notes": "Cardboard box on median strip along motorcade route. No owner. Placed within last hour per prior sweep comparison."
+    },
+    {
+      "object_id": "mc-obj-005",
+      "label": "suspicious_person",
+      "confidence": 0.63,
+      "crop_media_path": "/data/crops/mc_suspect_alley.jpg",
+      "topdown_bbox": [1050, 320, 25, 50],
+      "topdown_center": [1062, 345],
+      "track_id": "trk-m05",
+      "risk_hints": { "loitering": 0.8, "concealed_object": 0.5, "near_vip": 0.6 },
+      "notes": "Individual in dark clothing standing in alley mouth 5 blocks ahead. Has repositioned twice as motorcade approaches."
+    },
+    {
+      "object_id": "mc-obj-006",
+      "label": "perimeter_breach",
+      "confidence": 0.86,
+      "crop_media_path": "/data/crops/mc_breach.jpg",
+      "topdown_bbox": [350, 370, 30, 30],
+      "topdown_center": [365, 385],
+      "track_id": "trk-m06",
+      "risk_hints": { "breaching_perimeter": 0.9, "running": 0.7 },
+      "notes": "Person jumped road barrier into motorcade lane 2 blocks ahead. Running toward route centerline."
+    },
+    {
+      "object_id": "mc-obj-007",
+      "label": "unauthorized_drone",
+      "confidence": 0.58,
+      "crop_media_path": "/data/crops/mc_drone.jpg",
+      "topdown_bbox": [800, 150, 12, 12],
+      "topdown_center": [806, 156],
+      "track_id": "trk-m07",
+      "risk_hints": {},
+      "notes": "Small object hovering at ~120ft over buildings east of route. Possibly commercial drone or bird."
+    },
+    {
+      "object_id": "mc-obj-008",
+      "label": "protest_group",
+      "confidence": 0.88,
+      "crop_media_path": "/data/crops/mc_protesters.jpg",
+      "topdown_bbox": [1100, 450, 120, 80],
+      "topdown_center": [1160, 490],
+      "track_id": "trk-m08",
+      "risk_hints": { "aggressive": 0.4, "coordinated_movement": 0.8 },
+      "notes": "Group of ~50 protesters at intersection 6 blocks ahead. Blocking crosswalk. Police liaison present."
+    },
+    {
+      "object_id": "mc-obj-009",
+      "label": "approaching_vehicle",
+      "confidence": 0.80,
+      "crop_media_path": "/data/crops/mc_wrong_way.jpg",
+      "topdown_bbox": [450, 360, 50, 30],
+      "topdown_center": [475, 375],
+      "track_id": "trk-m09",
+      "risk_hints": { "counter_flow": 0.95, "approaching_stage": 0.7 },
+      "notes": "Sedan driving wrong-way on closed motorcade route. Approaching from 3 blocks ahead. Speed ~25mph."
+    }
+  ],
+  "instruction": {
+    "text": "Senator motorcade en route through downtown corridor. Critical priority: rooftop threats, vehicles in the route, and perimeter breaches. Immediately flag anyone or anything in the motorcade lane. Watch for suspicious packages and unauthorized drones. Monitor protest groups for movement toward the route.",
+    "priority_mode": "safety"
+  }
+}
